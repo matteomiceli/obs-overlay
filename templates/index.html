@@ -1,3 +1,14 @@
+<head>
+  <!-- Refresh every minute -->
+  <meta http-equiv="refresh" content="10">
+</head>
 <body>
-  hello {{.Player}}, your score is {{.Score}}
+  <u>Scores:</u>
+  <ul>
+  {{range .}}
+    <li>
+      {{.Player}}: {{.Score}}
+    </li>
+  {{end}}
+  </ul>
 </body>
