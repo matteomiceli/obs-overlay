@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -19,6 +18,6 @@ func getSheetData(url string) [][]string {
 	csvReader := csv.NewReader(res.Body)
 	content, err := csvReader.ReadAll()
 
-	fmt.Printf("Fetching sheet %s\nelapsed: %s\n", url, time.Since(start))
+	log.Printf("Fetching sheet %s\nelapsed: %s\n", url, time.Since(start))
 	return content
 }

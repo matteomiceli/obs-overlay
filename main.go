@@ -49,7 +49,7 @@ func renderView(w http.ResponseWriter, req *http.Request) {
 	}
 	err = templ.Execute(w, PageData{
 		Ranks:   getPlayerRanks(),
-		Refresh: template.HTMLAttr(fmt.Sprintf(`content="%s"`, getRefreshTime())),
+		Refresh: template.HTMLAttr(fmt.Sprintf(`content="%d"`, getRefreshTime())),
 	})
 	if err != nil {
 		log.Fatal(err)

@@ -69,14 +69,20 @@ func getTeamsWinIncrement() int {
 	return winInc
 }
 
-func getRefreshTime() string {
+func getRefreshTime() int {
 	refreshString := _getVariable("refreshTime")
 
 	// Attempt to guard against injection attempts, this value must be an int
-	_, err := strconv.Atoi(refreshString)
+	refreshInt, err := strconv.Atoi(refreshString)
 	if err != nil {
 		log.Fatal("Not a number")
 	}
 
-	return refreshString
+	// Let's try and stay well within the usage limits for the sheets API
+	if refreshInt < 3 {
+		log.Println("The minimum refresh value is once every 3 seconds")
+		return 3
+	}
+
+	return refreshInt
 }
