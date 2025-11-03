@@ -1,14 +1,47 @@
 <head>
   <!-- Refresh every minute -->
-  <meta http-equiv="refresh" content="10">
+  <meta http-equiv="refresh" content="60">
+  <style>
+  html, body {
+    max-width: max-content;
+    text-align: left;
+  }
+  #container {
+    background-color: rgba(0, 0, 0, 0.8);
+    max-width: max-content;
+    color: white;
+    font-family: sans;
+    padding: 1rem;
+    box-sizing: border-box;
+    border-radius: .5rem;
+  } 
+  #title {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+  }
+  #list {
+    padding: 0;
+  }
+  .list-item {
+    list-style: None;
+  }
+  </style>
 </head>
 <body>
-  <u>Scores:</u>
-  <ul>
-  {{range .}}
-    <li>
-      {{.Player}}: {{.Score}}
-    </li>
-  {{end}}
-  </ul>
+  <div id="container">
+    <u id="title">Leaderboard:</u>
+    <ul id="list">
+    {{range .}}
+      <li class="list-item">
+        <span class="player">
+          {{.Player}}:
+        </span> 
+        <span class="score">
+          {{.Score}}
+        </span>
+      </li>
+    {{end}}
+    </ul>
+  </div>
 </body>
