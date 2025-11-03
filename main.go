@@ -25,6 +25,7 @@ func getPlayerRanks() []Rank {
 	ranks := []Rank{}
 	parseOnesData(&ranks)
 	parseTeamsData(&ranks)
+	sortRanks(ranks)
 	return ranks
 }
 

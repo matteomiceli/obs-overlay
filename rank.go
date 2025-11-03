@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"slices"
+	"sort"
 	"strings"
 )
 
@@ -118,4 +119,10 @@ func parseTeamsData(ranks *[]Rank) *[]Rank {
 	}
 
 	return ranks
+}
+
+func sortRanks(ranks []Rank) {
+	sort.Slice(ranks, func(i, j int) bool {
+		return ranks[i].Score > ranks[j].Score
+	})
 }
