@@ -8,9 +8,11 @@ import (
 	"os"
 )
 
+var onesData [][]string
+var teamsData [][]string
+var varData [][]string
+
 func main() {
-	//teamsData := getSheetData("https://docs.google.com/spreadsheets/d/1c2IkaK9iFRRfE5hy8eHzn-YrDt9LSMUN32Jv51Mbt7k/export?format=csv&gid=924150328")
-	//fmt.Println(teamsData)
 	serve()
 }
 
@@ -20,12 +22,18 @@ type Rank struct {
 }
 
 func getPlayerRanks() []Rank {
-	data := []Rank{}
-	parseOnesData(&data)
-	return data
+	ranks := []Rank{}
+	parseOnesData(&ranks)
+	parseTeamsData(&ranks)
+	return ranks
 }
 
 func renderView(w http.ResponseWriter, req *http.Request) {
+	// Fetch data
+	onesData = getSheetData("https://docs.google.com/spreadsheets/d/1c2IkaK9iFRRfE5hy8eHzn-YrDt9LSMUN32Jv51Mbt7k/export?format=csv&gid=0")
+	teamsData = getSheetData("https://docs.google.com/spreadsheets/d/1c2IkaK9iFRRfE5hy8eHzn-YrDt9LSMUN32Jv51Mbt7k/export?format=csv&gid=924150328")
+	varData = getSheetData("https://docs.google.com/spreadsheets/d/1c2IkaK9iFRRfE5hy8eHzn-YrDt9LSMUN32Jv51Mbt7k/export?format=csv&gid=1512517550")
+
 	body, err := os.ReadFile("./templates/index.html")
 	t := template.New("overlay")
 	templ, err := t.Parse(string(body))
