@@ -23,6 +23,10 @@ type Rank struct {
 	Player string
 	Score  int
 }
+type PageData struct {
+	Ranks   []Rank
+	Refresh template.HTMLAttr
+}
 
 func getPlayerRanks() []Rank {
 	ranks := []Rank{}
@@ -43,7 +47,10 @@ func renderView(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = templ.Execute(w, getPlayerRanks())
+	err = templ.Execute(w, PageData{
+		Ranks:   getPlayerRanks(),
+		Refresh: template.HTMLAttr(fmt.Sprintf(`content="%s"`, getRefreshTime())),
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,6 +1,6 @@
 <head>
-  <!-- Refresh every minute -->
-  <meta http-equiv="refresh" content="60">
+  <!-- Revresh the page, configured by refresh_time var -->
+  <meta http-equiv="refresh" {{.Refresh}}>
   <style>
   html, body {
     max-width: max-content;
@@ -32,7 +32,7 @@
   <div id="container">
     <u id="title">Leaderboard:</u>
     <ul id="list">
-    {{range .}}
+    {{range .Ranks}}
       <li class="list-item">
         <span class="player">
           {{.Player}}:

@@ -10,6 +10,7 @@ import (
 const PLAYERS = 0
 const ONES_WIN_SCORE_INC = 1
 const TEAMS_WIN_SCORE_INC = 2
+const REFRESH_TIME = 3
 
 func _getVariable(varName string) string {
 	switch varName {
@@ -33,6 +34,13 @@ func _getVariable(varName string) string {
 				continue
 			}
 			return row[TEAMS_WIN_SCORE_INC]
+		}
+	case "refreshTime":
+		for i, row := range varData {
+			if i == 0 {
+				continue
+			}
+			return row[REFRESH_TIME]
 		}
 	}
 	return ""
@@ -59,4 +67,16 @@ func getTeamsWinIncrement() int {
 		log.Fatal(err)
 	}
 	return winInc
+}
+
+func getRefreshTime() string {
+	refreshString := _getVariable("refreshTime")
+
+	// Attempt to guard against injection attempts, this value must be an int
+	_, err := strconv.Atoi(refreshString)
+	if err != nil {
+		log.Fatal("Not a number")
+	}
+
+	return refreshString
 }
