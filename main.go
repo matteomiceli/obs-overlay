@@ -1,16 +1,19 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
 )
 
 var onesData [][]string
 var teamsData [][]string
 var varData [][]string
+
+//go:embed templates/index.html
+var indexHtml string
 
 func main() {
 	serve()
@@ -35,9 +38,8 @@ func renderView(w http.ResponseWriter, req *http.Request) {
 	teamsData = getSheetData("https://docs.google.com/spreadsheets/d/1c2IkaK9iFRRfE5hy8eHzn-YrDt9LSMUN32Jv51Mbt7k/export?format=csv&gid=924150328")
 	varData = getSheetData("https://docs.google.com/spreadsheets/d/1c2IkaK9iFRRfE5hy8eHzn-YrDt9LSMUN32Jv51Mbt7k/export?format=csv&gid=1512517550")
 
-	body, err := os.ReadFile("./templates/index.html")
 	t := template.New("overlay")
-	templ, err := t.Parse(string(body))
+	templ, err := t.Parse(indexHtml)
 	if err != nil {
 		log.Fatal(err)
 	}
