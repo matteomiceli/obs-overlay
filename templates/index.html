@@ -1,47 +1,182 @@
 <head>
-  <!-- Revresh the page, configured by refresh_time var -->
   <meta http-equiv="refresh" {{.Refresh}}>
   <style>
-  html, body {
-    max-width: max-content;
-    text-align: left;
-  }
-  #container {
-    background-color: rgba(0, 0, 0, 0.9);
-    max-width: max-content;
-    color: white;
-    font-family: sans;
-    padding: 1rem;
-    box-sizing: border-box;
-    border-radius: .5rem;
-  } 
-  #title {
-    text-align: center;
-    width: 100%;
-    display: inline-block;
-  }
-  #list {
-    padding: 0;
-  }
-  .list-item {
-    list-style: None;
-  }
+    :root {
+      --bg: #0b0e17;
+      --card: #141927;
+      --border: #1f253a;
+      --text: #f4f6fa;
+      --muted: #9ca3b7;
+      --accent: #4da3ff;
+      --gold: #ffd700;
+      --silver: #c0c0c0;
+      --bronze: #cd7f32;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      font-family: "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+    }
+
+    #container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 400px;
+      height: 400px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 1rem 1.5rem;
+      box-sizing: border-box;
+      border-radius: 0;
+      overflow-y: auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    #title {
+      display: block;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+
+    /* --- Podium section --- */
+    .podium {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .podium-spot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      flex: 1;
+      background: rgba(255,255,255,0.03);
+      padding: 0.5rem;
+      box-sizing: border-box;
+    }
+
+    .podium-spot span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .podium-spot .player {
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+
+    .podium-spot .score {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .podium-1 {
+      height: 130px;
+      background: linear-gradient(180deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
+      border-top: 3px solid var(--gold);
+      flex: 1.2;
+    }
+
+    .podium-2 {
+      height: 100px;
+      background: linear-gradient(180deg, rgba(192,192,192,0.15), rgba(192,192,192,0.05));
+      border-top: 3px solid var(--silver);
+    }
+
+    .podium-3 {
+      height: 90px;
+      background: linear-gradient(180deg, rgba(205,127,50,0.15), rgba(205,127,50,0.05));
+      border-top: 3px solid var(--bronze);
+    }
+
+    /* --- Remaining list --- */
+    #list {
+      padding: 0;
+      margin: 0;
+    }
+
+    .list-item {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 0.4rem 0.6rem;
+      margin-bottom: 0.3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-weight: 500;
+      transition: background 0.15s ease;
+    }
+
+    .list-item:hover {
+      background: rgba(77, 163, 255, 0.15);
+    }
+
+    .player {
+      font-weight: 600;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .score {
+      font-weight: 700;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
   </style>
 </head>
+
 <body>
   <div id="container">
-    <u id="title">Leaderboard:</u>
-    <ul id="list">
-    {{range .Ranks}}
-      <li class="list-item">
-        <span class="player">
-          {{.Player}}:
-        </span> 
-        <span class="score">
-          {{.Score}}
-        </span>
-      </li>
+    <!-- Podium (first 3 ranks) -->
+    {{if ge (len .Ranks) 3}}
+    <div class="podium">
+      <div class="podium-spot podium-2">
+        <span>🥈</span>
+        <span class="player">{{(index .Ranks 1).Player}}</span>
+        <span class="score">{{(index .Ranks 1).Score}}</span>
+      </div>
+      <div class="podium-spot podium-1">
+        <span>🥇</span>
+        <span class="player">{{(index .Ranks 0).Player}}</span>
+        <span class="score">{{(index .Ranks 0).Score}}</span>
+      </div>
+      <div class="podium-spot podium-3">
+        <span>🥉</span>
+        <span class="player">{{(index .Ranks 2).Player}}</span>
+        <span class="score">{{(index .Ranks 2).Score}}</span>
+      </div>
+    </div>
     {{end}}
+
+    <!-- Remaining ranks -->
+    <ul id="list">
+      {{range $i, $r := .Ranks}}
+        {{if ge $i 3}}
+          <li class="list-item">
+            <span class="player">{{$r.Player}}</span>
+            <span class="score">{{$r.Score}}</span>
+          </li>
+        {{end}}
+      {{end}}
     </ul>
   </div>
 </body>
